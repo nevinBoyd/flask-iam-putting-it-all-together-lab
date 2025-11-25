@@ -292,3 +292,15 @@ Optional Best Practice documentation steps:
 CodeGrade will use the same test suite as the test suite included.
 
 Once all tests are passing, commit and push your work using `git` to submit to CodeGrade through Canvas.
+
+---
+
+## Developer Notes
+
+- Added SQLAlchemy relationship using `back_populates` to avoid duplicate backref
+- Implemented attribute validation on `Recipe`:
+  - `title`: must be present
+  - `instructions`: must be >= 50 characters
+- Updated `/recipes` POST to catch validation errors and return `422`
+- Limited recipe access to logged-in user only
+

@@ -13,7 +13,7 @@ class User(db.Model):
     bio = db.Column(db.String)
 
     # relationship: User has many Recipes
-    recipes = relationship("Recipe", backref="user")
+    recipes = relationship("Recipe", back_populates="user")
 
     @hybrid_property
     def password_hash(self):
@@ -38,6 +38,19 @@ class Recipe(db.Model):
     minutes_to_complete = db.Column(db.Integer, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user = relationship("User", back_populates="recipes")
+
+    @validates("title")
+    def validate_title(self, key, value):
+        if not value or value.strip() == "":
+            raise ValueError("Title must be present")
+        return value
+
+    @validates("instructions")
+    def validate_instructions(self, key, value):
+        if not value or len(value.strip()) < 50:
+            raise ValueError("Instructions must be at least 50 characters long")
+        return value
 
     def __repr__(self):
         return f"<Recipe {self.id}: {self.title}>"
